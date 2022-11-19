@@ -1,10 +1,14 @@
 package com.egg.news.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -29,6 +33,9 @@ public class Usuario {
     private Long id;
     private String email;
     private String password;
+    @Temporal(TemporalType.DATE)
+    private Date fechaDeAlta;
+    private Boolean active;
 
     @Enumerated(EnumType.STRING)
     private Rol rol;

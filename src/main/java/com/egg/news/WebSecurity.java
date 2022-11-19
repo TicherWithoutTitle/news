@@ -14,12 +14,12 @@ import com.egg.news.services.UsuarioService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UsuarioService us;
+        // @Autowired
+        // UsuarioService us;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // auth.userDetailsService(us).passwordEncoder(new BCryptPasswordEncoder());
-        auth.userDetailsService(us);
-    }
+        // @Autowired
+        // public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        //     // auth.userDetailsService(us).passwordEncoder(new BCryptPasswordEncoder());
+        //     auth.userDetailsService(us);
+        // }
 }

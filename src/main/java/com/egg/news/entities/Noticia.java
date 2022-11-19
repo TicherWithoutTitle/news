@@ -3,6 +3,7 @@ package com.egg.news.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +17,9 @@ public class Noticia {
     private String titulo;
     private String cuerpo;
     private String foto;
+    @OneToOne
+    private Periodista creador;
+
 
     public Noticia() {
     }
