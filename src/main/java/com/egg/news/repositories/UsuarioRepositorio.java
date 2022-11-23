@@ -10,6 +10,6 @@ import com.egg.news.entities.Usuario;
 
 @Repository
 public interface UsuarioRepositorio extends JpaRepository<Usuario,Long> {
-    @Query("select u from Usuario u where email=:email")
+    @Query("select u from Usuario u where u.email=:email")
     public Usuario selectByUsername(@Param("email")String email);
 }

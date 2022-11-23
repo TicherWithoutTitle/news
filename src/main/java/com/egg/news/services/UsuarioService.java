@@ -1,6 +1,7 @@
 package com.egg.news.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,29 +24,49 @@ import com.egg.news.enumerators.Rol;
 import com.egg.news.repositories.UsuarioRepositorio;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements UserDetailsService{
     @Autowired
     UsuarioRepositorio JpaUsuario;
 
     @Transactional
     public void crearUsuario(String email, String password) {
-        Usuario usuario = new Usuario(email, password, Rol.USER);
+        Usuario usuario = new Usuario();
+        usuario.setActive(true);
+        usuario.setEmail(email);
+        usuario.setPassword(new BCryptPasswordEncoder().encode(password));
+        usuario.setRol(Rol.USER);
+        usuario.setFechaDeAlta(new Date());
         JpaUsuario.save(usuario);
     }
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = JpaUsuario.selectByUsername(username);
         if(usuario!=null){
-            List<GrantedAuthority> permission = new ArrayList<>();
+            List<GrantedAuthority> permisos = new ArrayList();
             GrantedAuthority p = new SimpleGrantedAuthority("ROLE_"+usuario.getRol().toString());
-            permission.add(p);
-            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession session = attr.getRequest().getSession(true);
-            session.setAttribute("user", usuario);
-            return new User(usuario.getEmail(), usuario.getPassword(), permission);
+            permisos.add(p);
+            // ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            // HttpSession session = attr.getRequest().getSession(true);
+            // session.setAttribute("user", usuario);
+            return new User(usuario.getEmail(), usuario.getPassword(), permisos);
         }
         return null;
     }
+    
+    // @Override
+    // public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    //     Usuario usuario = JpaUsuario.selectByUsername(username);
+    //     if(usuario!=null){
+            // List<GrantedAuthority> permission = new ArrayList<>();
+            // GrantedAuthority p = new SimpleGrantedAuthority("ROLE_"+usuario.getRol().toString());
+            // permission.add(p);
+            // ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            // HttpSession session = attr.getRequest().getSession(true);
+            // session.setAttribute("user", usuario);
+    //         return new User(usuario.getEmail(), usuario.getPassword(), permission);
+    //     }
+    //     return null;
+    // }
 
 }
