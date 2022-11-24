@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 import com.egg.news.enumerators.Rol;
 
 @Entity
-
 public class Periodista extends Usuario {
 
     @OneToMany
